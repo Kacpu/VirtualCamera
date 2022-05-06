@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using System.Diagnostics;
 using VirtualCamera.Src;
 
 namespace VirtualCamera
@@ -10,9 +11,8 @@ namespace VirtualCamera
     {
         private GraphicsDeviceManager _graphics;
         //private SpriteBatch _spriteBatch;
-        private Src.Viewport _viewport;
-        private PerspectiveProjection _perspectiveProjection;
-        private Cuboid cuboid1;
+        private World world;
+        private Camera camera;
 
         public Main()
         {
@@ -30,13 +30,6 @@ namespace VirtualCamera
 
             _graphics.ApplyChanges();
 
-            _viewport = new Src.Viewport(1080f, 720f, -240f);
-            _perspectiveProjection = new PerspectiveProjection(_viewport);
-            
-            cuboid1 = new Cuboid(30f, -60f);
-            cuboid1.Project(_perspectiveProjection.ptm);
-            cuboid1.TransformToPixels();
-
             base.Initialize();
         }
 
@@ -45,6 +38,10 @@ namespace VirtualCamera
             GraphicsManager.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            camera = new Camera(GraphicsManager.ScreenWidth, GraphicsManager.ScreenHeight, -100f);
+            world = new World();
+            camera.Observe(world, Camera.Action.None);
         }
 
         protected override void Update(GameTime gameTime)
@@ -53,6 +50,12 @@ namespace VirtualCamera
                 Exit();
 
             // TODO: Add your update logic here
+
+            var action = camera.TakeAction();
+            if(action != Camera.Action.None)
+            {
+                camera.Observe(world, action);
+            }
 
             base.Update(gameTime);
         }
@@ -65,7 +68,7 @@ namespace VirtualCamera
 
             GraphicsManager.spriteBatch.Begin();
 
-            cuboid1.Draw();
+            world.Draw();
 
             GraphicsManager.spriteBatch.End();
 

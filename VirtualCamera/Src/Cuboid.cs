@@ -9,8 +9,8 @@ namespace VirtualCamera.Src
 {
     public class Cuboid : WorldObject
     {
-        public float width = 40f;
-        public float length = 60f;
+        public float Width { get; set; } = 40f;
+        public float Length { get; set; } = 60f;
         public float height1 = 0f;
         public float height2 = 60f;
 
@@ -26,14 +26,14 @@ namespace VirtualCamera.Src
         public Cuboid(float startX, float startZ)
         {
             V1 = new Vector4(startX, height1, startZ, 1);
-            V2 = new Vector4(startX + width, height1, startZ, 1);
-            V3 = new Vector4(startX, height1, startZ - length, 1);
-            V4 = new Vector4(startX + width, height1, startZ - length, 1);
+            V2 = new Vector4(startX + Width, height1, startZ, 1);
+            V3 = new Vector4(startX, height1, startZ - Length, 1);
+            V4 = new Vector4(startX + Width, height1, startZ - Length, 1);
 
             V5 = new Vector4(startX, height2, startZ, 1);
-            V6 = new Vector4(startX + width, height2, startZ, 1);
-            V7 = new Vector4(startX, height2, startZ - length, 1);
-            V8 = new Vector4(startX + width, height2, startZ - length, 1);
+            V6 = new Vector4(startX + Width, height2, startZ, 1);
+            V7 = new Vector4(startX, height2, startZ - Length, 1);
+            V8 = new Vector4(startX + Width, height2, startZ - Length, 1);
 
             Vertices = new List<Vector4>()
             {
@@ -41,7 +41,7 @@ namespace VirtualCamera.Src
             };
         }
 
-        public void Draw()
+        public override void Draw()
         {
             GraphicsManager.spriteBatch.DrawLine(Pixels[0], Pixels[1], Color.AliceBlue);
             GraphicsManager.spriteBatch.DrawLine(Pixels[0], Pixels[2], Color.AliceBlue);

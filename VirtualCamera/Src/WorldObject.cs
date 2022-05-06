@@ -5,30 +5,45 @@ using System.Text;
 
 namespace VirtualCamera.Src
 {
-    public class WorldObject
+    public abstract class WorldObject
     {
-        public List<Vector4> Vertices { get; set; }
-        public List<Vector2> Pixels { get; set; } = new List<Vector2>();
+        protected List<Vector4> Vertices { get; set; }
+        protected List<Vector4> PerspectiveVertices { get; set; }
+        protected List<Vector2> Pixels { get; set; }
 
-        public void Project(Matrix ptm)
+
+        public void Observe(Matrix? worldTransformationMatrix, Matrix perspectiveTransformationMatrix)
         {
+            PerspectiveVertices = new List<Vector4>();
+            Pixels = new List<Vector2>();
+
             for (int i = 0; i < Vertices.Count; i++)
             {
-                Vertices[i] = Vertices[i].LeftTransform(ptm);
-                Vertices[i] = PerspectiveProjection.PerspectiveDivision(Vertices[i]);
-            }
-        }
-
-        public void TransformToPixels()
-        {
-            for (int i = 0; i < Vertices.Count; i++)
-            {
-                Pixels.Add(new Vector2()
+                if(worldTransformationMatrix is Matrix wtm)
                 {
-                    X = (Vertices[i].X + 1) * 1080f * 0.5f,
-                    Y = (1 - Vertices[i].Y) * 720f * 0.5f,
-                });
+                    Vertices[i] = Vertices[i].LeftTransform(wtm);
+                }
+
+                PerspectiveVertexTransform(Vertices[i], perspectiveTransformationMatrix);
+                TransformVertexToPixel(PerspectiveVertices[i]);
             }
         }
+
+        private void PerspectiveVertexTransform(Vector4 vertex, Matrix ptm)
+        {
+            var v = vertex.LeftTransform(ptm).PerspectiveDivide();
+            PerspectiveVertices.Add(v);
+        }
+
+        private void TransformVertexToPixel(Vector4 perspectiveVertex)
+        {
+            Pixels.Add(new Vector2()
+            {
+                X = (perspectiveVertex.X + 1) * GraphicsManager.ScreenWidth * 0.5f,
+                Y = (1 - perspectiveVertex.Y) * GraphicsManager.ScreenHeight * 0.5f,
+            });
+        }
+
+        public abstract void Draw();
     }
 }
