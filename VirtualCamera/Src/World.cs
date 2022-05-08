@@ -12,14 +12,14 @@ namespace VirtualCamera.Src
 
         public World()
         {
-            Cuboid cuboid1 = new Cuboid(50f, -100f);
-            Cuboid cuboid2 = new Cuboid(50f, -200f);
-            Cuboid cuboid3 = new Cuboid(-90f, -100f);
-            Cuboid cuboid4 = new Cuboid(-90f, -200f);
+            Cuboid cuboid1 = new Cuboid(50f, -30f, -200f, 40f, 60f, 60f);
+            Cuboid cuboid2 = new Cuboid(50f, -30f, -300f, 40f, 60f, 60f);
+            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 60f, 60f);
+            Cuboid cuboid4 = new Cuboid(-90f, -30f, -300f, 40f, 60f, 60f);
 
             worldObjects = new List<WorldObject>()
             {
-                cuboid1, cuboid2, cuboid3, cuboid4
+                cuboid3, cuboid4, cuboid1, cuboid2
             };
         }
 

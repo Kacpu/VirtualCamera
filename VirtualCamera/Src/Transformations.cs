@@ -53,7 +53,5 @@ namespace VirtualCamera.Src
 
             return rotationMatrix;
         }
-
-
     }
 }

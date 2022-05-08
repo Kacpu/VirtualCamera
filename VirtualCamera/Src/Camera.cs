@@ -17,7 +17,7 @@ namespace VirtualCamera.Src
         private float viewportDistance;
         private float tgHalfFov;
         private Matrix perspectiveTransformationMatrix;
-        private readonly float speed = 5f;
+        private readonly float speed = 2f;
         private readonly float angleSpeed = 0.5f;
 
         public enum Action
@@ -36,6 +36,7 @@ namespace VirtualCamera.Src
             NegRotateZ,
             ZoomIn,
             ZoomOut,
+            Reset,
             None
         }
 
@@ -48,8 +49,8 @@ namespace VirtualCamera.Src
             aspectRatio = this.viewportWidth / this.viewportHeight;
             tgHalfFov = CountTgHalfFov();
 
-            zNear = -0.1f;
-            zFar = -1000f;
+            zNear = 0.1f;
+            zFar = 1000f;
 
             perspectiveTransformationMatrix = new Matrix();
             SetPerspectiveMatrix();
@@ -82,6 +83,8 @@ namespace VirtualCamera.Src
 
                 Keys.OemPlus => Action.ZoomIn,
                 Keys.OemMinus => Action.ZoomOut,
+
+                Keys.R => Action.Reset,
 
                 _ => Action.None
             };
@@ -145,13 +148,15 @@ namespace VirtualCamera.Src
 
         private void ZoomOut()
         {
-            viewportDistance += speed;
+            viewportDistance = viewportDistance + speed < 0 ? viewportDistance + speed : viewportDistance;
             tgHalfFov = CountTgHalfFov();
             SetPerspectiveMatrix();
         }
 
         private float CountTgHalfFov()
         {
+            Debug.WriteLine("d: " + viewportDistance);
+            Debug.WriteLine(2*Math.Atan2(viewportHeight, (2 * Math.Abs(viewportDistance)))*180/Math.PI);
             return viewportHeight / (2 * Math.Abs(viewportDistance));
         }
 

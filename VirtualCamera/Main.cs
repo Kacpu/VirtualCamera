@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Shapes;
+using MonoGame.Extended.VectorDraw;
 using System.Diagnostics;
 using VirtualCamera.Src;
 
@@ -39,9 +41,7 @@ namespace VirtualCamera
 
             // TODO: use this.Content to load your game content here
 
-            camera = new Camera(GraphicsManager.ScreenWidth, GraphicsManager.ScreenHeight, -100f);
-            world = new World();
-            camera.Observe(world, Camera.Action.None);
+            SetCamera();
         }
 
         protected override void Update(GameTime gameTime)
@@ -52,7 +52,12 @@ namespace VirtualCamera
             // TODO: Add your update logic here
 
             var action = camera.TakeAction();
-            if(action != Camera.Action.None)
+
+            if(action == Camera.Action.Reset)
+            {
+                SetCamera();
+            }
+            else if(action != Camera.Action.None)
             {
                 camera.Observe(world, action);
             }
@@ -62,7 +67,7 @@ namespace VirtualCamera
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(247, 244, 242));
 
             // TODO: Add your drawing code here
 
@@ -73,6 +78,13 @@ namespace VirtualCamera
             GraphicsManager.spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void SetCamera()
+        {
+            camera = new Camera(GraphicsManager.ScreenWidth, GraphicsManager.ScreenHeight, -1000f);
+            world = new World();
+            camera.Observe(world, Camera.Action.None);
         }
     }
 }
