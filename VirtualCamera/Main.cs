@@ -11,14 +11,12 @@ namespace VirtualCamera
 {
     public class Main : Game
     {
-        private GraphicsDeviceManager _graphics;
-        //private SpriteBatch _spriteBatch;
         private World world;
         private Camera camera;
 
         public Main()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            GraphicsManager.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -27,10 +25,10 @@ namespace VirtualCamera
         {
             // TODO: Add your initialization logic here
 
-            _graphics.PreferredBackBufferWidth = GraphicsManager.ScreenWidth;
-            _graphics.PreferredBackBufferHeight = GraphicsManager.ScreenHeight;
+            GraphicsManager.graphics.PreferredBackBufferWidth = GraphicsManager.ScreenWidth;
+            GraphicsManager.graphics.PreferredBackBufferHeight = GraphicsManager.ScreenHeight;
 
-            _graphics.ApplyChanges();
+            GraphicsManager.graphics.ApplyChanges();
 
             base.Initialize();
         }

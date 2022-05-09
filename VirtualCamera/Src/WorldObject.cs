@@ -23,12 +23,6 @@ namespace VirtualCamera.Src
 
                 var vp = Vertices[i].Z >= 0 ? new Vector4(Vertices[i].X, Vertices[i].Y, -0.001f, Vertices[i].W) : Vertices[i];
 
-                //var vp = Vertices[i];
-                //if (Vertices[i].Z >= 0)
-                //{
-                //    continue;
-                //}
-
                 PerspectiveVertexTransform(i, vp, perspectiveTransformationMatrix);
                 TransformVertexToPixel(i, PerspectiveVertices[i]);
             }
@@ -38,27 +32,6 @@ namespace VirtualCamera.Src
         {
             var v = vertex.LeftTransform(ptm);
             v = v.PerspectiveDivide();
-
-            if(vertex.Z == -1f)
-            {
-                //Debug.WriteLine("here");
-            }
-
-            //if (v.X < -1 || v.X > 1)
-            //{
-            //    Debug.WriteLine("here");
-            //}
-
-            //if(v.Z < -1 || v.Z > 1)
-            //{
-            //    v.X = v.X < -1 ? -1 : v.X;
-            //    v.X = v.X > 1 ? 1 : v.X;
-            //    v.Y = v.Y < -1 ? -1 : v.Y;
-            //    v.Y = v.Y > 1 ? 1 : v.Y;
-            //}
-
-            //v.X = v.X < -1 || v.X > 1 ? PerspectiveVertices[id].X: v.X;
-            //v.Y = v.Y < -1 || v.Y > 1 ? PerspectiveVertices[id].Y : v.Y;
 
             PerspectiveVertices[id] = v;
         }

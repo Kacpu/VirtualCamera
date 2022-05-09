@@ -36,6 +36,7 @@ namespace VirtualCamera.Src
             NegRotateZ,
             ZoomIn,
             ZoomOut,
+            TakePhoto,
             Reset,
             None
         }
@@ -78,11 +79,13 @@ namespace VirtualCamera.Src
                 Keys.I => Action.NegRotateX,
                 Keys.K => Action.PosRotateX,
 
-                Keys.J => Action.NegRotateZ,
-                Keys.L => Action.PosRotateZ,
+                Keys.J => Action.PosRotateZ,
+                Keys.L => Action.NegRotateZ,
 
                 Keys.OemPlus => Action.ZoomIn,
                 Keys.OemMinus => Action.ZoomOut,
+
+                Keys.Enter => Action.TakePhoto,
 
                 Keys.R => Action.Reset,
 
@@ -132,6 +135,9 @@ namespace VirtualCamera.Src
                 case Action.ZoomOut:
                     ZoomOut(); break;
 
+                case Action.TakePhoto:
+                    Photo.TakePhoto(); return;
+
                 default:
                     break;
             }
@@ -156,7 +162,7 @@ namespace VirtualCamera.Src
         private float CountTgHalfFov()
         {
             Debug.WriteLine("d: " + viewportDistance);
-            Debug.WriteLine(2*Math.Atan2(viewportHeight, (2 * Math.Abs(viewportDistance)))*180/Math.PI);
+            Debug.WriteLine(2*Math.Atan2(viewportHeight, (2 * Math.Abs(viewportDistance))) * 180/Math.PI);
             return viewportHeight / (2 * Math.Abs(viewportDistance));
         }
 
