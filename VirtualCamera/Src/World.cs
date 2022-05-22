@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
@@ -16,9 +17,9 @@ namespace VirtualCamera.Src
 
         public World()
         {
-            Cuboid cuboid1 = new Cuboid(50f, -30f, -200f, 40f, 60f, 60f);
+            Cuboid cuboid1 = new Cuboid(50f, -30f, -200f, 40f, 60f, 30f);
             Cuboid cuboid2 = new Cuboid(50f, -30f, -300f, 40f, 60f, 60f);
-            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 60f, 60f);
+            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 60f, 30f);
             Cuboid cuboid4 = new Cuboid(-90f, -30f, -300f, 40f, 60f, 60f);
 
             worldObjects = new List<WorldObject>()
@@ -94,13 +95,8 @@ namespace VirtualCamera.Src
 
                 intersectPoints = intersectPoints.OrderBy(x => x.X).ToList();
 
-
-                //<Edge, (float,float)> lineFrom = intersectPoints[0];
-                //float lineTo = intersectPoints.Count == 1 ? intersectPoints[0] : intersectPoints[1];
-
                 if (intersectPoints.Count == 1)
                 {
-                    //lines.Add((intersectPoints.First().Value, intersectPoints.First().Key.po);
                     continue;
                 }
 
@@ -115,6 +111,11 @@ namespace VirtualCamera.Src
                     }
 
                     secondPoint = intersectPoints[j + 1];
+
+                    if(secondPoint.X < 0 || firstPoint.X > GraphicsManager.ScreenWidth)
+                    {
+                        continue;
+                    }
 
                     (float x, float y) mPoint = ((secondPoint.X + firstPoint.X)  /  2, secondPoint.Y);
 
@@ -138,22 +139,6 @@ namespace VirtualCamera.Src
                     {
                         lines.Add((new Vector2(firstPoint.X, firstPoint.Y), new Vector2(secondPoint.X, secondPoint.Y), lineColor.Value));
                     }
-
-                    //float p1Depth = firstPoint.Edge.Polygon1.CalculateDepth(mPoint.x, mPoint.y);
-                    //float p2Depth = firstPoint.Edge.Polygon2.CalculateDepth(mPoint.x, mPoint.y);
-
-                    //if (p1Depth > p2Depth)
-                    //{
-                    //    firstPoint.Edge.MainPolygon = firstPoint.Edge.Polygon1;
-                    //}
-                    //else
-                    //{
-                    //    firstPoint.Edge.MainPolygon = firstPoint.Edge.Polygon2;
-                    //}
-
-                    //if(!secondPoint.Edge.Equals())
-
-                    //lines.Add((new Vector2(firstPoint.X, firstPoint.Y), new Vector2(secondPoint.X, secondPoint.Y), firstPoint.Edge.MainPolygon.Color));
                 }
                 //Debug.WriteLine(lines.Count);
             }
@@ -164,19 +149,17 @@ namespace VirtualCamera.Src
             //krawedz na prosta
             float A1 = (edge.P1.Y - edge.P2.Y);
             float B1 = edge.P2.X - edge.P1.X;
-            float C1 = edge.P1.X   *   edge.P2.Y - edge.P2.X   *   edge.P1.Y;
+            float C1 = edge.P1.X * edge.P2.Y - edge.P2.X * edge.P1.Y;
 
             float A2 = 0;
             float B2 = 1;
             float C2 = -y;
 
             float? xp = null;
-            float? yp = null;
 
             if((A1 * B2 - A2 * B1) != 0)
             {
                 xp = (B1 * C2 - B2 * C1) / (A1 * B2 - A2 * B1);
-                yp = (C1 * A2 - C2 * A1) / (A1 * B2 - A2 * B1);
             }
 
             return (xp, y);
@@ -189,16 +172,9 @@ namespace VirtualCamera.Src
             //    obj.Draw();
             //}
 
-            int c = 0;
-
             foreach (var line in lines)
             {
-                c++;
                 GraphicsManager.spriteBatch.DrawLine(line.p1, line.p2, line.color);
-                if (c == lines.Count / 2)
-                {
-                    // break;
-                }
             }
         }
     }

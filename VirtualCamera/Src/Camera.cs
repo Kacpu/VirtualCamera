@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,6 +20,8 @@ namespace VirtualCamera.Src
         private Matrix perspectiveTransformationMatrix;
         private readonly float speed = 2f;
         private readonly float angleSpeed = 0.5f;
+        private bool isCrossHairDraw = false;
+        private bool isCrossHairKey = false;
 
         public enum Action
         {
@@ -38,7 +41,8 @@ namespace VirtualCamera.Src
             ZoomOut,
             TakePhoto,
             Reset,
-            None
+            CrossHairToggle,
+            None,
         }
 
         public Camera(float viewportWidth, float viewportHeight, float viewportDistance)
@@ -62,6 +66,17 @@ namespace VirtualCamera.Src
             KeyboardState kstate = Keyboard.GetState();
 
             var key = kstate.GetPressedKeyCount() > 0 ? kstate.GetPressedKeys()[0] : Keys.None;
+            
+            if(kstate.IsKeyDown(Keys.Tab))
+            {
+                isCrossHairKey = true;
+            }
+
+            if (isCrossHairKey && kstate.IsKeyUp(Keys.Tab))
+            {
+                isCrossHairKey = false;
+                return Action.CrossHairToggle;
+            }
 
             Action action = key switch
             {
@@ -88,6 +103,8 @@ namespace VirtualCamera.Src
                 Keys.Enter => Action.TakePhoto,
 
                 Keys.R => Action.Reset,
+
+                //Keys.Tab => Action.CrossHairToggle,
 
                 _ => Action.None
             };
@@ -138,6 +155,9 @@ namespace VirtualCamera.Src
                 case Action.TakePhoto:
                     Photo.TakePhoto(); return;
 
+                case Action.CrossHairToggle:
+                    ToggleCrossHair(); return;
+
                 default:
                     break;
             }
@@ -163,8 +183,8 @@ namespace VirtualCamera.Src
 
         private float CountTgHalfFov()
         {
-            Debug.WriteLine("d: " + viewportDistance);
-            Debug.WriteLine(2*Math.Atan2(viewportHeight, (2 * Math.Abs(viewportDistance))) * 180/Math.PI);
+            //Debug.WriteLine("d: " + viewportDistance);
+            //Debug.WriteLine(2*Math.Atan2(viewportHeight, (2 * Math.Abs(viewportDistance))) * 180/Math.PI);
             return viewportHeight / (2 * Math.Abs(viewportDistance));
         }
 
@@ -175,6 +195,23 @@ namespace VirtualCamera.Src
             perspectiveTransformationMatrix.M33 = (zNear + zFar) / (zNear - zFar);
             perspectiveTransformationMatrix.M34 = 2 * zNear * zFar / (zNear - zFar);
             perspectiveTransformationMatrix.M43 = -1f;
+        }
+
+        private void ToggleCrossHair()
+        {
+            isCrossHairDraw = !isCrossHairDraw;
+        }
+
+        public void DrawCrossHair()
+        {
+            if (isCrossHairDraw)
+            {
+                int maxHeight = GraphicsManager.ScreenHeight;
+                int maxWidth = GraphicsManager.ScreenWidth;
+
+                GraphicsManager.spriteBatch.DrawLine(new Vector2(0, maxHeight / 2), new Vector2(maxWidth, maxHeight / 2), Color.Black);
+                GraphicsManager.spriteBatch.DrawLine(new Vector2(maxWidth / 2, 0), new Vector2(maxWidth / 2, maxHeight), Color.Black);
+            }
         }
     }
 }

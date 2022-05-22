@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.VectorDraw;
+using System;
 using System.Diagnostics;
 using VirtualCamera.Src;
 
@@ -13,6 +14,7 @@ namespace VirtualCamera
     {
         private World world;
         private Camera camera;
+        private FramesManager framesManager;
 
         public Main()
         {
@@ -28,6 +30,9 @@ namespace VirtualCamera
             GraphicsManager.graphics.PreferredBackBufferWidth = GraphicsManager.ScreenWidth;
             GraphicsManager.graphics.PreferredBackBufferHeight = GraphicsManager.ScreenHeight;
 
+            IsFixedTimeStep = false;
+            //TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 30.0f);
+
             GraphicsManager.graphics.ApplyChanges();
 
             base.Initialize();
@@ -39,6 +44,8 @@ namespace VirtualCamera
 
             // TODO: use this.Content to load your game content here
 
+            framesManager = new FramesManager("ups");
+
             SetCamera();
         }
 
@@ -48,6 +55,8 @@ namespace VirtualCamera
                 Exit();
 
             // TODO: Add your update logic here
+
+            //framesManager.CountFrames(gameTime);
 
             var action = camera.TakeAction();
 
@@ -72,6 +81,7 @@ namespace VirtualCamera
             GraphicsManager.spriteBatch.Begin();
 
             world.Draw();
+            camera.DrawCrossHair();
 
             GraphicsManager.spriteBatch.End();
 
