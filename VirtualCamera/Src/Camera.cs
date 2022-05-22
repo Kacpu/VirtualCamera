@@ -143,6 +143,8 @@ namespace VirtualCamera.Src
             }
 
             world.Observe(transformationMatrix, perspectiveTransformationMatrix);
+
+            world.ScanLine();
         }
 
         private void ZoomIn()

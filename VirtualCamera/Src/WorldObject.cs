@@ -10,7 +10,9 @@ namespace VirtualCamera.Src
     {
         protected List<Vector4> Vertices { get; set; }
         protected Vector4[] PerspectiveVertices { get; set; } 
-        protected Vector2[] Pixels { get; set; } 
+        protected Vector3[] Pixels { get; set; }
+        public abstract Edge[] Edges { get; set; }
+        public abstract Polygon[] Polygons { get; set; }
 
         public void Observe(Matrix? worldTransformationMatrix, Matrix perspectiveTransformationMatrix)
         {
@@ -38,14 +40,17 @@ namespace VirtualCamera.Src
 
         private void TransformVertexToPixel(int id, Vector4 perspectiveVertex)
         {
-            Pixels[id] = new Vector2()
+            Pixels[id] = new Vector3()
             {
                 X = (perspectiveVertex.X + 1) * GraphicsManager.ScreenWidth * 0.5f,
                 Y = (1 - perspectiveVertex.Y) * GraphicsManager.ScreenHeight * 0.5f,
+                Z = perspectiveVertex.Z
             };
         }
 
-        protected bool IsOut()
+        public abstract void GenerateEdgesAndPolygons();
+
+        public bool IsOut()
         {
             foreach(var p in Pixels)
             {
