@@ -7,24 +7,29 @@ namespace VirtualCamera.Src
     public class PhongModel
     {
         //observer position
-        private Vector3 ObserverPosition = new Vector3(1.0f,  1.0f,  0.0f);
+        private Vector3 ObserverPosition = new Vector3(0.0f,  0.0f,  0.0f);
 
         //Light position
-        private Vector3 LightPosition = new Vector3(1280.0f,  720.0f,  1.0f);
+        private Vector3 LightPosition;// = new Vector3(0.0f,  1.0f,  -0.1f);
 
         //Ambient
-        private float K_a = 0.7f; //weight
-        private Vector3 I_a = new Vector3(0.8f, 0.8f, 0); //color
+        private float K_a = 0.9f; //weight
+        private Vector3 I_a = new Vector3(0.9f, 0.9f, 0.9f); //color
 
         //Diffuse
-        private float K_d = 0.6f;
-        private Vector3 I_d = new Vector3(0.7f, 0.7f, 0);
+        private float K_d = 0.1f;
+        private Vector3 I_d = new Vector3(0.4f, 0.4f, 0);
 
         //Specular
-        private float K_s = 0.7f;
-        private Vector3 I_s = new Vector3(1.0f,  1.0f,  1.0f);
-        private float Alpha = 10;
+        private float K_s = 0.2f;
+        private Vector3 I_s = new Vector3(0.5f,  0.5f,  0.5f);
+        private float Alpha = 1;
 
+
+        public PhongModel(Vector4 lightPosition)
+        {
+            LightPosition = new Vector3(lightPosition.X, lightPosition.Y, lightPosition.Z);
+        }
 
         public Vector3 GetPhongModelCalc(Vector3 point, Vector3 normal)
         {
@@ -56,7 +61,7 @@ namespace VirtualCamera.Src
 
         private Vector3 GetSpecular(Vector3 N, Vector3 L, Vector3 Point)
         {
-
+            
             Vector3 R = 2  *  Vector3.Dot(L  , N)  *  N - L;
             Vector3 V = Vector3.Normalize(ObserverPosition - Point);
             float dotRV = Vector3.Dot(R,V);

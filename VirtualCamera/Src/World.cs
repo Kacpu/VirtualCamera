@@ -15,12 +15,14 @@ namespace VirtualCamera.Src
         private readonly List<WorldObject> worldObjects;
         private List<(Vector2 p1, Vector2 p2, Color color)> lines;
         private List<(Vector3 p, Color color)> pixels;
+        private Vector4 LightPosition;
 
         public World()
         {
-            Cuboid cuboid1 = new Cuboid(50f, -30f, -200f, 40f, 60f, 30f);
+            LightPosition = new Vector4(-80f, 20f, -180f, 1);
+            Cuboid cuboid1 = new Cuboid(-50f, -90f, -300f, 100f, 100f, 80f);
             Cuboid cuboid2 = new Cuboid(50f, -30f, -300f, 40f, 60f, 60f);
-            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 40f, 40f);
+            Cuboid cuboid3 = new Cuboid(-80f, -50f, -250f, 40f, 40f, 40f);
             Cuboid cuboid4 = new Cuboid(-90f, -30f, -300f, 40f, 60f, 60f);
 
             worldObjects = new List<WorldObject>()
@@ -35,6 +37,21 @@ namespace VirtualCamera.Src
             {
                 obj.Observe(worldTransformationMatrix, perspectiveTransformationMatrix);
             }
+
+            LightTransform(worldTransformationMatrix);
+        }
+
+        private void LightTransform(Matrix? worldTransformationMatrix)
+        {
+            if (worldTransformationMatrix is Matrix wtm)
+            {
+                LightPosition = LightPosition.LeftTransform(wtm);
+            }
+
+            //LightPosition = LightPosition.Z >= 0 ? new Vector4(LightPosition.X, LightPosition.Y, -0.001f, LightPosition.W) : LightPosition;
+
+            //LightPosition = LightPosition.LeftTransform(perspectiveTransformationMatrix);
+            //LightPosition = LightPosition.PerspectiveDivide();
         }
 
         public void ScanLine()
@@ -52,7 +69,7 @@ namespace VirtualCamera.Src
                 {
                     continue;
                 }
-                o.GenerateEdgesAndPolygons();
+                o.GenerateEdgesAndPolygons(LightPosition);
                 edges.AddRange(o.Edges);
                 polygons.AddRange(o.Polygons);
             }

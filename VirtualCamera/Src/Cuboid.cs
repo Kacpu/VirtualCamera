@@ -16,6 +16,10 @@ namespace VirtualCamera.Src
         public override Polygon[] Polygons { get; set; }
         private readonly Texture2D crazy_cat;
         private readonly Texture2D colour;
+        private readonly Texture2D marble;
+        private readonly Texture2D sweet;
+        private Texture2D oneText;
+
         public List<Vector3> VerticeNormals { get; set; }
 
         public Cuboid(float x, float y, float z, float width, float length, float height)
@@ -36,27 +40,38 @@ namespace VirtualCamera.Src
             Pixels = new Vector3[Vertices.Count];
 
             crazy_cat = GraphicsManager.content.Load<Texture2D>("cat3_256");
-            colour = GraphicsManager.content.Load<Texture2D>("yellow_256");
+            colour = GraphicsManager.content.Load<Texture2D>("wood_256");
+            marble = GraphicsManager.content.Load<Texture2D>("gk_256");
+            sweet = GraphicsManager.content.Load<Texture2D>("sweet");
+
+            oneText = sweet;
         }
 
-        public override void GenerateEdgesAndPolygons()
+        public override void GenerateEdgesAndPolygons(Vector4 lightPosition)
         {
             Polygons = new Polygon[]
             {
-                new Polygon(Pixels[0], Pixels[1], Pixels[3], Pixels[2], Color.Orange, crazy_cat), //0 - dol
-                new Polygon(Pixels[0], Pixels[1], Pixels[5], Pixels[4], Color.Green, colour), //1 - front
-                new Polygon(Pixels[0], Pixels[2], Pixels[6], Pixels[4], Color.Red, colour), //2 - lewo
-                new Polygon(Pixels[1], Pixels[3], Pixels[7], Pixels[5], Color.Yellow, colour), //3 - prawo
-                new Polygon(Pixels[2], Pixels[3], Pixels[7], Pixels[6], Color.Blue, colour), //4 - tyl
-                new Polygon(Pixels[4], Pixels[5], Pixels[7], Pixels[6], Color.Violet, colour) //5 - gora
+                new Polygon(Pixels[0], Pixels[1], Pixels[3], Pixels[2], Color.Orange, colour, lightPosition), //0 - dol
+                new Polygon(Pixels[0], Pixels[1], Pixels[5], Pixels[4], Color.Green, sweet, lightPosition), //1 - front
+                new Polygon(Pixels[0], Pixels[2], Pixels[6], Pixels[4], Color.Red, colour, lightPosition), //2 - lewo
+                new Polygon(Pixels[1], Pixels[3], Pixels[7], Pixels[5], Color.Yellow, crazy_cat, lightPosition), //3 - prawo
+                new Polygon(Pixels[2], Pixels[3], Pixels[7], Pixels[6], Color.Blue, colour, lightPosition), //4 - tyl
+                new Polygon(Pixels[4], Pixels[5], Pixels[7], Pixels[6], Color.Violet, marble, lightPosition) //5 - gora
             };
 
-            Polygons[0].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[1], PerspectiveVertices[3], PerspectiveVertices[2]);
-            Polygons[1].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[1], PerspectiveVertices[5], PerspectiveVertices[4]);
-            Polygons[2].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[2], PerspectiveVertices[6], PerspectiveVertices[4]);
-            Polygons[3].SetPerspectiveVertices(PerspectiveVertices[1], PerspectiveVertices[3], PerspectiveVertices[7], PerspectiveVertices[5]);
-            Polygons[4].SetPerspectiveVertices(PerspectiveVertices[2], PerspectiveVertices[3], PerspectiveVertices[7], PerspectiveVertices[6]);
-            Polygons[5].SetPerspectiveVertices(PerspectiveVertices[4], PerspectiveVertices[5], PerspectiveVertices[7], PerspectiveVertices[6]);
+            Polygons[0].SetVertices(Vertices[0], Vertices[1], Vertices[3], Vertices[2]);
+            Polygons[1].SetVertices(Vertices[0], Vertices[1], Vertices[5], Vertices[4]);
+            Polygons[2].SetVertices(Vertices[0], Vertices[2], Vertices[6], Vertices[4]);
+            Polygons[3].SetVertices(Vertices[1], Vertices[3], Vertices[7], Vertices[5]);
+            Polygons[4].SetVertices(Vertices[2], Vertices[3], Vertices[7], Vertices[6]);
+            Polygons[5].SetVertices(Vertices[4], Vertices[5], Vertices[7], Vertices[6]);
+
+            //Polygons[0].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[1], PerspectiveVertices[3], PerspectiveVertices[2]);
+            //Polygons[1].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[1], PerspectiveVertices[5], PerspectiveVertices[4]);
+            //Polygons[2].SetPerspectiveVertices(PerspectiveVertices[0], PerspectiveVertices[2], PerspectiveVertices[6], PerspectiveVertices[4]);
+            //Polygons[3].SetPerspectiveVertices(PerspectiveVertices[1], PerspectiveVertices[3], PerspectiveVertices[7], PerspectiveVertices[5]);
+            //Polygons[4].SetPerspectiveVertices(PerspectiveVertices[2], PerspectiveVertices[3], PerspectiveVertices[7], PerspectiveVertices[6]);
+            //Polygons[5].SetPerspectiveVertices(PerspectiveVertices[4], PerspectiveVertices[5], PerspectiveVertices[7], PerspectiveVertices[6]);
 
             VerticeNormals = new();
             VerticeNormals.Add(MeanNormal(Polygons[0].Normal, Polygons[1].Normal, Polygons[2].Normal));

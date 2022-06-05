@@ -61,6 +61,18 @@
 /processorParam:TextureFormat=Color
 /build:cat3_256.jpg
 
+#begin gk_256.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gk_256.jpg
+
 #begin marble_256.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -72,6 +84,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:marble_256.png
+
+#begin sweet.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sweet.jpg
+
+#begin wood_256.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:wood_256.jpg
 
 #begin yellow_256.jpg
 /importer:TextureImporter

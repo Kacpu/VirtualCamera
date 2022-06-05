@@ -48,7 +48,7 @@ namespace VirtualCamera.Src
             };
         }
 
-        public abstract void GenerateEdgesAndPolygons();
+        public abstract void GenerateEdgesAndPolygons(Vector4 lightPosition);
 
         public bool IsOut()
         {
