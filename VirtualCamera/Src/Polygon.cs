@@ -347,9 +347,9 @@ namespace VirtualCamera.Src
             //Vector3 l4 = phong.GetPhongModelCalc(p4, n4);
 
             Vector3 l1 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[0].X, perspectiveVertices[0].Y, perspectiveVertices[0].Z), n1);
-            Vector3 l2 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[0].X, perspectiveVertices[1].Y, perspectiveVertices[0].Z), n2);
-            Vector3 l3 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[0].X, perspectiveVertices[2].Y, perspectiveVertices[0].Z), n3);
-            Vector3 l4 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[0].X, perspectiveVertices[3].Y, perspectiveVertices[0].Z), n4);
+            Vector3 l2 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[1].X, perspectiveVertices[1].Y, perspectiveVertices[1].Z), n2);
+            Vector3 l3 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[2].X, perspectiveVertices[2].Y, perspectiveVertices[2].Z), n3);
+            Vector3 l4 = phong.GetPhongModelCalc(new Vector3(perspectiveVertices[3].X, perspectiveVertices[3].Y, perspectiveVertices[3].Z), n4);
 
             lights = new() { l1, l2, l3, l4 };
         }
