@@ -30,6 +30,7 @@ namespace VirtualCamera
             GraphicsManager.graphics.PreferredBackBufferWidth = GraphicsManager.ScreenWidth;
             GraphicsManager.graphics.PreferredBackBufferHeight = GraphicsManager.ScreenHeight;
 
+            GraphicsManager.graphics.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
             //TargetElapsedTime = TimeSpan.FromSeconds(1.0f / 30.0f);
 
@@ -40,6 +41,7 @@ namespace VirtualCamera
 
         protected override void LoadContent()
         {
+            GraphicsManager.content = this.Content;
             GraphicsManager.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here

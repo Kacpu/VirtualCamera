@@ -14,17 +14,18 @@ namespace VirtualCamera.Src
     {
         private readonly List<WorldObject> worldObjects;
         private List<(Vector2 p1, Vector2 p2, Color color)> lines;
+        private List<(Vector3 p, Color color)> pixels;
 
         public World()
         {
             Cuboid cuboid1 = new Cuboid(50f, -30f, -200f, 40f, 60f, 30f);
             Cuboid cuboid2 = new Cuboid(50f, -30f, -300f, 40f, 60f, 60f);
-            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 60f, 30f);
+            Cuboid cuboid3 = new Cuboid(-90f, -30f, -200f, 40f, 40f, 40f);
             Cuboid cuboid4 = new Cuboid(-90f, -30f, -300f, 40f, 60f, 60f);
 
             worldObjects = new List<WorldObject>()
             {
-                cuboid3, cuboid4, cuboid1, cuboid2
+                cuboid3
             };
         }
 
@@ -39,8 +40,11 @@ namespace VirtualCamera.Src
         public void ScanLine()
         {
             lines = new List<(Vector2 p1, Vector2 p2, Color color)>();
-            List<Edge> edges = new List<Edge>();
-            List<Polygon> polygons = new List<Polygon>();
+            pixels = new();
+            List<Edge> edges = new();
+            List<Polygon> polygons = new();
+
+            List<(IntersectPoint p1, IntersectPoint p2, Polygon polygon)> texturesLines = new();
 
             foreach (var o in worldObjects)
             {
@@ -100,6 +104,10 @@ namespace VirtualCamera.Src
                     continue;
                 }
 
+                Polygon pastPol = null;
+                IntersectPoint startP = null;
+                IntersectPoint lastP = null;
+
                 for (int j = 0; j < intersectPoints.Count; j++)
                 {
                     IntersectPoint firstPoint = intersectPoints[j];
@@ -120,7 +128,9 @@ namespace VirtualCamera.Src
                     (float x, float y) mPoint = ((secondPoint.X + firstPoint.X)  /  2, secondPoint.Y);
 
                     float minZ = float.MaxValue;
-                    Color? lineColor = null; 
+
+                    //Color? lineColor = null;
+                    Polygon polygon = null;
 
                     foreach (var pol in polygons)
                     {
@@ -130,18 +140,77 @@ namespace VirtualCamera.Src
                             if(tZ < minZ)
                             {
                                 minZ = tZ;
-                                lineColor = pol.Color;
+                                //lineColor = pol.Color;
+                                polygon = pol;
                             }
                         }
                     }
 
-                    if(lineColor != null)
+                    // Debug.WriteLine("");
+
+                    //if (polygon != null && pastPol == null)
+                    //{
+                    //    startP = firstPoint;
+                    //    lastP = secondPoint;
+                    //}
+                    //else if (polygon == null && pastPol != null)
+                    //{
+                    //    texturesLines.Add((startP, lastP, pastPol));
+                    //}
+                    //else if (pastPol.Id != polygon.Id)
+                    //{
+                    //    texturesLines.Add((startP, lastP, pastPol));
+                    //    startP = firstPoint;
+                    //    lastP = secondPoint;
+                    //}
+                    //else if (pastPol.Id == polygon.Id)
+                    //{
+                    //    lastP = secondPoint;
+                    //}
+                    //else
+                    //{
+                    //    continue;
+                    //}
+
+                    //pastPol = polygon;
+
+                    if (polygon != null)
                     {
-                        lines.Add((new Vector2(firstPoint.X, firstPoint.Y), new Vector2(secondPoint.X, secondPoint.Y), lineColor.Value));
+                        //lines.Add((new Vector2(firstPoint.X, firstPoint.Y), new Vector2(secondPoint.X, secondPoint.Y), lineColor.Value));
+                        pixels = pixels.Concat(polygon.TextureInterpolate(firstPoint, secondPoint)).ToList();
+                        //texturesLines.Add((firstPoint, secondPoint, polygon));
                     }
                 }
                 //Debug.WriteLine(lines.Count);
             }
+
+            //IntersectPoint startP = texturesLines[0].p1;
+            //IntersectPoint lastP = texturesLines[0].p2;
+
+            //List<(IntersectPoint p1, IntersectPoint p2, Polygon polygon)> updateTexturesLines = new();
+            //for (int i = 0; i + 1 < texturesLines.Count; i++)
+            //{
+            //    if(texturesLines[i].polygon.Id == texturesLines[i + 1].polygon.Id)
+            //    {
+            //        lastP = texturesLines[i + 1].p2;
+            //    }
+            //    else
+            //    {
+            //        updateTexturesLines.Add((startP, lastP, texturesLines[i].polygon));
+            //        startP = texturesLines[i + 1].p1;
+            //        lastP = texturesLines[i + 1].p2;
+            //    }
+            //}
+
+            //if(updateTexturesLines[^1].polygon.Id != texturesLines[^1].polygon.Id)
+            //{
+            //    updateTexturesLines.Add((startP, lastP, texturesLines[^1].polygon));
+            //}
+
+            //foreach (var (p1, p2, polygon) in texturesLines)
+            //{
+            //    pixels = pixels.Concat(polygon.TextureInterpolate(p1, p2)).ToList();
+            //}
         }
 
         private (float?, float?) CalcIntersect(Edge edge, int y)
@@ -171,10 +240,18 @@ namespace VirtualCamera.Src
             //{
             //    obj.Draw();
             //}
+            //worldObjects[0].Draw();
 
-            foreach (var line in lines)
+            //GraphicsManager.spriteBatch.d
+
+            //foreach (var line in lines)
+            //{
+            //    GraphicsManager.spriteBatch.DrawLine(line.p1, line.p2, line.color);
+            //}
+
+            foreach (var pixel in pixels)
             {
-                GraphicsManager.spriteBatch.DrawLine(line.p1, line.p2, line.color);
+                GraphicsManager.spriteBatch.DrawPoint(pixel.p.X, pixel.p.Y, pixel.color);
             }
         }
     }

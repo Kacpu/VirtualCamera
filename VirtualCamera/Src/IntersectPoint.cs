@@ -4,7 +4,7 @@ using System.Text;
 
 namespace VirtualCamera.Src
 {
-    class IntersectPoint
+    public class IntersectPoint
     {
         public float X { get; set; }
         public float Y { get; set; }
