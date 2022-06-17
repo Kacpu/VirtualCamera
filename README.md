@@ -2,7 +2,7 @@
 
 # VirtualCamera
 
-Simple camera made only by matrixes and math operations.
+Simple 3D virtual camera made only by matrixes and math operations.
 Without OpenGL and any 3D graphic library!
 
 ## Capabilities:
@@ -14,7 +14,7 @@ Without OpenGL and any 3D graphic library!
 
 # VirtualCamera
 
-Prosta kamera stworzona tylko za pomocą macierzy i operacji matematycznych.
+Prosta wirtualna kamera 3D stworzona tylko za pomocą macierzy i operacji matematycznych.
 Bez OpenGL i jakiejkolwiek biblioteki do grafiki 3D!
 
 ## Możliwości:
