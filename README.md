@@ -10,6 +10,7 @@ Without OpenGL and any 3D graphic library!
 - Moving scene and camera with colored objects (scanline algorithm)
 - Texturing object
 
+***
 
 # VirtualCamera
 
